@@ -19,5 +19,12 @@
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
+		padding: var(--space-xs) var(--space-sm);
+		background: var(--color-accent);
+		color: var(--bg-primary);
+		border-radius: var(--radius-sm);
+		font-size: 0.875rem;
+		font-weight: 700;
+		min-width: 3rem;
 	}
 </style>

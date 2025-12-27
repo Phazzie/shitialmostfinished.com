@@ -4,15 +4,15 @@
 
 import { describe, it, expect, beforeEach } from 'vitest';
 import type { ProjectService, Wing } from '$lib/contracts';
-import { mockProjectService } from './project.service.mock';
+import { projectService } from './project.service';
 
 // This will be swapped between mock and real implementation
 let service: ProjectService;
 
 describe('ProjectService', () => {
 	beforeEach(() => {
-		// Wire the mock service for Phase 4
-		service = mockProjectService;
+		// Phase 6: Using real implementation
+		service = projectService;
 	});
 
 	describe('getAll', () => {

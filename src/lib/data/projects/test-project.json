@@ -1,0 +1,14 @@
+{
+	"slug": "test-project",
+	"title": "Test Project",
+	"wing": "music",
+	"completion": 75,
+	"tags": ["THE_BREAKTHROUGH"],
+	"aiSource": "claude",
+	"dateUpdated": "2025-01-01",
+	"pitch": "A test project for validation",
+	"quickVersion": "# Test\n\nContent here",
+	"recap": "## Analysis\n\nThis is the recap.",
+	"relatedProjects": [],
+	"hasTranscript": true
+}
