@@ -6,12 +6,13 @@ export default defineConfig({
 	plugins: [svelte({ hot: !process.env.VITEST })],
 	test: {
 		globals: true,
-		environment: 'happy-dom',
+		environment: 'jsdom',
 		setupFiles: []
 	},
 	resolve: {
 		alias: {
 			$lib: fileURLToPath(new URL('./src/lib', import.meta.url))
-		}
+		},
+		conditions: ['browser']
 	}
 });

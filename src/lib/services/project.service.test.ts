@@ -4,9 +4,9 @@
 
 import { describe, it, expect, beforeEach } from 'vitest';
 import type { ProjectService, Project, Wing } from '$lib/contracts';
+import { mockProjectService } from './project.service.mock';
 
 // This will be swapped between mock and real implementation
-// For now, we import nothing - tests will fail (this is correct in SDD)
 let service: ProjectService;
 
 // Test fixtures - valid project data
@@ -27,8 +27,8 @@ const validProject: Project = {
 
 describe('ProjectService', () => {
 	beforeEach(() => {
-		// TODO: Replace with mock/real service once implemented
-		// service = mockProjectService;
+		// Wire the mock service for Phase 4
+		service = mockProjectService;
 	});
 
 	describe('getAll', () => {
