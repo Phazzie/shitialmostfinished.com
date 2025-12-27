@@ -8,8 +8,17 @@ import type { ProjectService, Project, Wing } from '$lib/contracts';
 // In a real app, this would be dynamic file reading
 import testProject from '$lib/data/projects/test-project.json';
 
+function validateProject(data: unknown): Project {
+  // Add basic checks for required fields
+  const p = data as any;
+  if (!p.slug || !p.title || !p.wing || typeof p.completion !== 'number') {
+    throw new Error('Invalid project data');
+  }
+  return p as Project;
+}
+
 // Consolidated projects array
-const projects: Project[] = [testProject as Project];
+const projects: Project[] = [validateProject(testProject)];
 
 export const projectService: ProjectService = {
 	async getAll(): Promise<Project[]> {
