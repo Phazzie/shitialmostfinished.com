@@ -19,6 +19,7 @@
   --color-claude: #d97706;
   --color-chatgpt: #10b981;
   --color-gemini: #6366f1;
+  --color-mixed: #a855f7;  /* Purple blend to represent multiple sources */
 
   /* === FUNCTIONAL === */
   --color-accent: var(--color-music);
