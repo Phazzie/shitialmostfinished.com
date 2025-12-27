@@ -11,10 +11,7 @@ export type Message = {
 	content: string; // Markdown
 	isHighlight?: boolean; // Key moment flag
 	annotation?: string; // Sidebar note
-} & (
-	| { speaker: 'human' }
-	| { speaker: 'ai'; aiSource: AISource }
-);
+} & ({ speaker: 'human' } | { speaker: 'ai'; aiSource: AISource });
 
 export interface Transcript {
 	projectSlug: string; // Links to parent Project

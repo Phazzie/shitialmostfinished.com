@@ -3,32 +3,16 @@
 // Tests are IMMUTABLE - if implementation fails, fix implementation not tests
 
 import { describe, it, expect, beforeEach } from 'vitest';
-import type { ProjectService, Project, Wing } from '$lib/contracts';
+import type { ProjectService, Wing } from '$lib/contracts';
+import { mockProjectService } from './project.service.mock';
 
 // This will be swapped between mock and real implementation
-// For now, we import nothing - tests will fail (this is correct in SDD)
 let service: ProjectService;
-
-// Test fixtures - valid project data
-const validProject: Project = {
-	slug: 'test-project',
-	title: 'Test Project',
-	wing: 'music',
-	completion: 75,
-	tags: ['THE_BREAKTHROUGH'],
-	aiSource: 'claude',
-	dateUpdated: '2025-01-01',
-	pitch: 'A test project for validation',
-	quickVersion: '# Test\n\nContent here',
-	recap: '## Analysis\n\nThis is the recap.',
-	relatedProjects: [],
-	hasTranscript: false
-};
 
 describe('ProjectService', () => {
 	beforeEach(() => {
-		// TODO: Replace with mock/real service once implemented
-		// service = mockProjectService;
+		// Wire the mock service for Phase 4
+		service = mockProjectService;
 	});
 
 	describe('getAll', () => {

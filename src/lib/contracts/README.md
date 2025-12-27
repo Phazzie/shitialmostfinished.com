@@ -7,6 +7,7 @@ This directory contains the **SEAMS** of the application - the boundaries where 
 Once tests are written against these contracts, **DO NOT MODIFY THEM**.
 
 If something breaks:
+
 - ❌ Do NOT change the contract
 - ❌ Do NOT change the tests
 - ✅ DELETE the broken implementation
