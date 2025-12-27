@@ -9,8 +9,8 @@ import { mockProjectService } from './project.service.mock';
 // This will be swapped between mock and real implementation
 let service: ProjectService;
 
-// Test fixtures - valid project data
-const validProject: Project = {
+// Test fixtures - valid project data (kept for reference)
+const _validProject: Project = {
 	slug: 'test-project',
 	title: 'Test Project',
 	wing: 'music',

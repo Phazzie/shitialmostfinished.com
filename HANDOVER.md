@@ -10,9 +10,11 @@
 ## PROJECT OVERVIEW
 
 ### What We're Building
+
 A portfolio website showcasing creative projects (songs, apps, stories) in various stages of completion. The core philosophy is: **"The process IS the product."**
 
 **Key Features**:
+
 - Project cards with completion percentages (0-100%)
 - Full development recaps/analysis for each project
 - Complete AI conversation transcripts showing the creative process
@@ -20,6 +22,7 @@ A portfolio website showcasing creative projects (songs, apps, stories) in vario
 - Alternative view: browse by completion percentage ("spectrum view")
 
 ### Tech Stack
+
 - **Framework**: SvelteKit 2.20.6+
 - **Language**: TypeScript (strict mode)
 - **Testing**: Vitest 2.x with @testing-library/svelte
@@ -56,16 +59,16 @@ If implementation breaks, we don't fix it—we **delete and regenerate** from th
 
 ### The SDD Process (8 Phases)
 
-| Phase | What | Status |
-|-------|------|--------|
-| **1. Setup** | SvelteKit + TypeScript + Vitest | ✅ COMPLETE |
-| **2. Contracts** | Define SEAMS (data boundaries) | ✅ COMPLETE & FROZEN |
-| **3. Tests** | Write failing tests against contracts | ✅ COMPLETE & FROZEN |
-| **4. Mocks** | Minimal implementations to pass tests | 🔜 **NEXT** |
-| **5. Component Tests & Mocks** | UI component test/mock pairs | ⏳ Future |
-| **6. Implementation** | Real code replaces mocks | ⏳ Future |
-| **7. Pages** | SvelteKit routes and layouts | ⏳ Future |
-| **8. Data & Deploy** | Real content + Vercel deployment | ⏳ Future |
+| Phase                          | What                                  | Status               |
+| ------------------------------ | ------------------------------------- | -------------------- |
+| **1. Setup**                   | SvelteKit + TypeScript + Vitest       | ✅ COMPLETE          |
+| **2. Contracts**               | Define SEAMS (data boundaries)        | ✅ COMPLETE & FROZEN |
+| **3. Tests**                   | Write failing tests against contracts | ✅ COMPLETE & FROZEN |
+| **4. Mocks**                   | Minimal implementations to pass tests | 🔜 **NEXT**          |
+| **5. Component Tests & Mocks** | UI component test/mock pairs          | ⏳ Future            |
+| **6. Implementation**          | Real code replaces mocks              | ⏳ Future            |
+| **7. Pages**                   | SvelteKit routes and layouts          | ⏳ Future            |
+| **8. Data & Deploy**           | Real content + Vercel deployment      | ⏳ Future            |
 
 ---
 
@@ -74,6 +77,7 @@ If implementation breaks, we don't fix it—we **delete and regenerate** from th
 ### Phase 1: Setup ✅
 
 **Files Created**:
+
 - `package.json` - Dependencies with security fixes (@sveltejs/kit 2.20.6+ for XSS fix)
 - `svelte.config.js` - SvelteKit configuration
 - `vite.config.ts` - Vite configuration
@@ -88,6 +92,7 @@ If implementation breaks, we don't fix it—we **delete and regenerate** from th
 - `src/routes/+page.svelte` - Placeholder homepage
 
 **Directory Structure**:
+
 ```
 src/lib/
 ├── contracts/     # SEAMS (IMMUTABLE)
@@ -104,68 +109,76 @@ src/lib/
 **Files Created** (`src/lib/contracts/`):
 
 1. **`project.ts`** - Project data contract
+
    ```typescript
    export type Wing = 'music' | 'apps' | 'stories' | 'process' | 'finished';
    export type AISource = 'claude' | 'chatgpt' | 'gemini' | 'mixed';
-   export type ProcessTag = 'THE_BREAKTHROUGH' | 'THE_ARGUMENT' | 'THE_GRAVEYARD' | 'THE_LONG_GAME' | 'THE_TANGENT';
+   export type ProcessTag =
+   	| 'THE_BREAKTHROUGH'
+   	| 'THE_ARGUMENT'
+   	| 'THE_GRAVEYARD'
+   	| 'THE_LONG_GAME'
+   	| 'THE_TANGENT';
 
    export interface Project {
-     slug: string;
-     title: string;
-     wing: Wing;
-     completion: number; // 0-100
-     tags: ProcessTag[];
-     aiSource: AISource;
-     dateStarted?: string;
-     dateUpdated: string;
-     pitch: string;
-     quickVersion: string; // Markdown
-     recap: string; // Markdown (800-1500 words)
-     relatedProjects: string[];
-     hasTranscript: boolean;
+   	slug: string;
+   	title: string;
+   	wing: Wing;
+   	completion: number; // 0-100
+   	tags: ProcessTag[];
+   	aiSource: AISource;
+   	dateStarted?: string;
+   	dateUpdated: string;
+   	pitch: string;
+   	quickVersion: string; // Markdown
+   	recap: string; // Markdown (800-1500 words)
+   	relatedProjects: string[];
+   	hasTranscript: boolean;
    }
 
    export interface ProjectService {
-     getAll(): Promise<Project[]>;
-     getBySlug(slug: string): Promise<Project | null>;
-     getByWing(wing: Wing): Promise<Project[]>;
-     getByCompletionRange(min: number, max: number): Promise<Project[]>;
+   	getAll(): Promise<Project[]>;
+   	getBySlug(slug: string): Promise<Project | null>;
+   	getByWing(wing: Wing): Promise<Project[]>;
+   	getByCompletionRange(min: number, max: number): Promise<Project[]>;
    }
    ```
 
 2. **`transcript.ts`** - Conversation data contract
+
    ```typescript
    // Uses discriminated union for type safety
    export type Message = {
-     content: string;
-     isHighlight?: boolean;
-     annotation?: string;
+   	content: string;
+   	isHighlight?: boolean;
+   	annotation?: string;
    } & (
-     | { speaker: 'human' }
-     | { speaker: 'ai'; aiSource: AISource }  // AI messages MUST have aiSource
+   	| { speaker: 'human' }
+   	| { speaker: 'ai'; aiSource: AISource } // AI messages MUST have aiSource
    );
 
    export interface Transcript {
-     projectSlug: string;
-     title?: string;
-     date?: string;
-     messages: Message[];
+   	projectSlug: string;
+   	title?: string;
+   	date?: string;
+   	messages: Message[];
    }
 
    export interface TranscriptService {
-     getByProjectSlug(slug: string): Promise<Transcript | null>;
+   	getByProjectSlug(slug: string): Promise<Transcript | null>;
    }
    ```
 
 3. **`wing.ts`** - Category configuration
+
    ```typescript
    // Uses Record for O(1) lookup performance
    export const WING_CONFIGS: Record<Wing, Omit<WingConfig, 'id'>> = {
-     stories: { name: 'Stories', color: '#be123c', description: '...', icon: '📖' },
-     music: { name: 'Music', color: '#06b6d4', description: '...', icon: '🎵' },
-     apps: { name: 'Apps', color: '#84cc16', description: '...', icon: '💻' },
-     process: { name: 'Process', color: '#f97316', description: '...', icon: '🔧' },
-     finished: { name: 'Finished', color: '#fbbf24', description: '...', icon: '✨' }
+   	stories: { name: 'Stories', color: '#be123c', description: '...', icon: '📖' },
+   	music: { name: 'Music', color: '#06b6d4', description: '...', icon: '🎵' },
+   	apps: { name: 'Apps', color: '#84cc16', description: '...', icon: '💻' },
+   	process: { name: 'Process', color: '#f97316', description: '...', icon: '🔧' },
+   	finished: { name: 'Finished', color: '#fbbf24', description: '...', icon: '✨' }
    };
 
    export function getWingConfig(wingId: Wing): WingConfig;
@@ -174,6 +187,7 @@ src/lib/
 4. **`index.ts`** - Re-exports all contracts
 
 **Key Design Decisions**:
+
 - ✅ **Discriminated union** for `Message` type - impossible to create invalid states
 - ✅ **Record instead of array** for `WING_CONFIGS` - O(1) lookup + compile-time exhaustiveness
 - ✅ **No runtime imports** in contracts - pure TypeScript
@@ -199,6 +213,7 @@ src/lib/
    - Decimal value handling
 
 **Current Test Status**:
+
 ```
 Total: 30 tests
 Failing: 30 tests ✅ (EXPECTED - no implementation exists)
@@ -221,7 +236,9 @@ This is **correct** in SDD! Tests must fail before implementation exists.
 ## WHAT'S NEXT: PHASE 4 (MOCKS)
 
 ### Goal
+
 Create **minimal mock implementations** that make all 30 tests pass. This proves:
+
 1. The contracts are complete and testable
 2. The tests are valid
 3. The interfaces work as designed
@@ -236,42 +253,42 @@ Create a mock with hardcoded data that satisfies all tests:
 import type { ProjectService, Project, Wing } from '$lib/contracts';
 
 const mockProjects: Project[] = [
-  {
-    slug: 'test-project',
-    title: 'Test Project',
-    wing: 'music',
-    completion: 75,
-    tags: ['THE_BREAKTHROUGH'],
-    aiSource: 'claude',
-    dateUpdated: '2025-01-01',
-    pitch: 'A test project for validation',
-    quickVersion: '# Test\n\nContent here',
-    recap: '## Analysis\n\nThis is the recap.',
-    relatedProjects: [],
-    hasTranscript: true
-  },
-  // Add more mock projects to satisfy all test cases
-  // - At least one with completion: 75 (for exact match test)
-  // - At least one in 'finished' wing (or leave empty to test empty array)
-  // - Projects in range 50-100 for completion range tests
+	{
+		slug: 'test-project',
+		title: 'Test Project',
+		wing: 'music',
+		completion: 75,
+		tags: ['THE_BREAKTHROUGH'],
+		aiSource: 'claude',
+		dateUpdated: '2025-01-01',
+		pitch: 'A test project for validation',
+		quickVersion: '# Test\n\nContent here',
+		recap: '## Analysis\n\nThis is the recap.',
+		relatedProjects: [],
+		hasTranscript: true
+	}
+	// Add more mock projects to satisfy all test cases
+	// - At least one with completion: 75 (for exact match test)
+	// - At least one in 'finished' wing (or leave empty to test empty array)
+	// - Projects in range 50-100 for completion range tests
 ];
 
 export const mockProjectService: ProjectService = {
-  async getAll(): Promise<Project[]> {
-    return mockProjects;
-  },
+	async getAll(): Promise<Project[]> {
+		return mockProjects;
+	},
 
-  async getBySlug(slug: string): Promise<Project | null> {
-    return mockProjects.find(p => p.slug === slug) ?? null;
-  },
+	async getBySlug(slug: string): Promise<Project | null> {
+		return mockProjects.find((p) => p.slug === slug) ?? null;
+	},
 
-  async getByWing(wing: Wing): Promise<Project[]> {
-    return mockProjects.filter(p => p.wing === wing);
-  },
+	async getByWing(wing: Wing): Promise<Project[]> {
+		return mockProjects.filter((p) => p.wing === wing);
+	},
 
-  async getByCompletionRange(min: number, max: number): Promise<Project[]> {
-    return mockProjects.filter(p => p.completion >= min && p.completion <= max);
-  }
+	async getByCompletionRange(min: number, max: number): Promise<Project[]> {
+		return mockProjects.filter((p) => p.completion >= min && p.completion <= max);
+	}
 };
 ```
 
@@ -281,34 +298,34 @@ export const mockProjectService: ProjectService = {
 import type { TranscriptService, Transcript } from '$lib/contracts';
 
 const mockTranscripts: Transcript[] = [
-  {
-    projectSlug: 'test-project',
-    title: 'Building Test Project',
-    date: '2025-01-01',
-    messages: [
-      {
-        speaker: 'human',
-        content: 'Let\'s build a test project'
-      },
-      {
-        speaker: 'ai',
-        aiSource: 'claude',
-        content: 'Great idea! Here\'s my approach...',
-        isHighlight: true,
-        annotation: 'The key insight'
-      },
-      {
-        speaker: 'human',
-        content: 'That works perfectly'
-      }
-    ]
-  }
+	{
+		projectSlug: 'test-project',
+		title: 'Building Test Project',
+		date: '2025-01-01',
+		messages: [
+			{
+				speaker: 'human',
+				content: "Let's build a test project"
+			},
+			{
+				speaker: 'ai',
+				aiSource: 'claude',
+				content: "Great idea! Here's my approach...",
+				isHighlight: true,
+				annotation: 'The key insight'
+			},
+			{
+				speaker: 'human',
+				content: 'That works perfectly'
+			}
+		]
+	}
 ];
 
 export const mockTranscriptService: TranscriptService = {
-  async getByProjectSlug(slug: string): Promise<Transcript | null> {
-    return mockTranscripts.find(t => t.projectSlug === slug) ?? null;
-  }
+	async getByProjectSlug(slug: string): Promise<Transcript | null> {
+		return mockTranscripts.find((t) => t.projectSlug === slug) ?? null;
+	}
 };
 ```
 
@@ -317,30 +334,32 @@ export const mockTranscriptService: TranscriptService = {
 Update test files to import and use the mocks:
 
 **`project.service.test.ts`**:
+
 ```typescript
 import { mockProjectService } from './project.service.mock';
 
 let service: ProjectService;
 
 describe('ProjectService', () => {
-  beforeEach(() => {
-    service = mockProjectService; // 👈 Wire the mock
-  });
-  // ... rest of tests
+	beforeEach(() => {
+		service = mockProjectService; // 👈 Wire the mock
+	});
+	// ... rest of tests
 });
 ```
 
 **`transcript.service.test.ts`**:
+
 ```typescript
 import { mockTranscriptService } from './transcript.service.mock';
 
 let service: TranscriptService;
 
 describe('TranscriptService', () => {
-  beforeEach(() => {
-    service = mockTranscriptService; // 👈 Wire the mock
-  });
-  // ... rest of tests
+	beforeEach(() => {
+		service = mockTranscriptService; // 👈 Wire the mock
+	});
+	// ... rest of tests
 });
 ```
 
@@ -350,22 +369,22 @@ Create a minimal Svelte component that passes the tests:
 
 ```svelte
 <script lang="ts">
-  export let completion: number;
+	export let completion: number;
 
-  // Clamp value to 0-100
-  $: clamped = Math.max(0, Math.min(100, Math.round(completion)));
+	// Clamp value to 0-100
+	$: clamped = Math.max(0, Math.min(100, Math.round(completion)));
 </script>
 
 <div class="completion-badge">
-  <span>{clamped}%</span>
+	<span>{clamped}%</span>
 </div>
 
 <style>
-  .completion-badge {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-  }
+	.completion-badge {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+	}
 </style>
 ```
 
@@ -378,6 +397,7 @@ npm test
 **Expected result**: All 30 tests pass ✅
 
 If any test fails:
+
 - Review the mock data
 - Ensure the mock satisfies ALL test cases
 - Do NOT modify the tests
@@ -424,19 +444,20 @@ If any test fails:
 ### Design System (`src/lib/styles/theme.css`)
 
 **Colors**:
+
 ```css
 /* Wing colors */
---color-stories: #be123c;  /* Red */
---color-music: #06b6d4;    /* Cyan */
---color-apps: #84cc16;     /* Lime */
---color-process: #f97316;  /* Orange */
+--color-stories: #be123c; /* Red */
+--color-music: #06b6d4; /* Cyan */
+--color-apps: #84cc16; /* Lime */
+--color-process: #f97316; /* Orange */
 --color-finished: #fbbf24; /* Amber */
 
 /* AI source colors */
---color-claude: #d97706;   /* Amber */
---color-chatgpt: #10b981;  /* Emerald */
---color-gemini: #6366f1;   /* Indigo */
---color-mixed: #a855f7;    /* Purple */
+--color-claude: #d97706; /* Amber */
+--color-chatgpt: #10b981; /* Emerald */
+--color-gemini: #6366f1; /* Indigo */
+--color-mixed: #a855f7; /* Purple */
 ```
 
 **Spacing**: `--space-xs` through `--space-2xl`
@@ -524,9 +545,11 @@ shitialmostfinished.com/
    - Display percentage
 
 5. **Run tests**
+
    ```bash
    npm test
    ```
+
    - All 30 tests should pass ✅
    - If not, adjust mock data (not tests!)
 
@@ -542,6 +565,7 @@ shitialmostfinished.com/
 ## COMMON PITFALLS TO AVOID
 
 ❌ **DO NOT**:
+
 - Modify contracts after tests are written
 - Modify tests to fix broken implementation
 - Debug implementation code (delete and regenerate instead)
@@ -550,6 +574,7 @@ shitialmostfinished.com/
 - Skip phases or change phase order
 
 ✅ **DO**:
+
 - Follow the SDD process exactly
 - Delete and regenerate broken code
 - Trust that tests define success
@@ -584,6 +609,7 @@ When you resume work:
 ## SUCCESS CRITERIA
 
 ### Phase 4 Complete When:
+
 - ✅ All 30 tests pass
 - ✅ Mocks are minimal (no extra features)
 - ✅ No contracts were modified
@@ -591,6 +617,7 @@ When you resume work:
 - ✅ Clean commit pushed to branch
 
 ### Ready for Phase 5 When:
+
 - Phase 4 success criteria met
 - User approves moving forward
 - You understand what components need tests next

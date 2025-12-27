@@ -6,6 +6,7 @@
 	export let completion: number;
 
 	// Clamp value to 0-100 and round to nearest integer
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	$: clamped = Math.max(0, Math.min(100, Math.round(completion)));
 </script>
 

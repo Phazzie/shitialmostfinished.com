@@ -2,7 +2,7 @@
 // IMMUTABLE - do not modify to fix failing implementation
 
 import { describe, it, expect, beforeEach } from 'vitest';
-import type { TranscriptService, Transcript, Message, AISource } from '$lib/contracts';
+import type { TranscriptService } from '$lib/contracts';
 import { mockTranscriptService } from './transcript.service.mock';
 
 // This will be swapped between mock and real implementation
