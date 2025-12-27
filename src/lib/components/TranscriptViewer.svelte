@@ -43,22 +43,70 @@
 	.transcript-viewer {
 		display: flex;
 		flex-direction: column;
-		gap: 1rem;
+		gap: var(--space-md);
+	}
+
+	.transcript-title {
+		color: var(--text-primary);
+		font-size: 1.5rem;
+		margin: 0;
+	}
+
+	.transcript-date {
+		color: var(--text-secondary);
+		font-size: 0.875rem;
 	}
 
 	.messages {
 		display: flex;
 		flex-direction: column;
-		gap: 0.5rem;
+		gap: var(--space-md);
+	}
+
+	.empty-state {
+		color: var(--text-tertiary);
+		text-align: center;
+		padding: var(--space-xl);
 	}
 
 	.message {
 		display: flex;
 		flex-direction: column;
-		gap: 0.25rem;
+		gap: var(--space-xs);
+		padding: var(--space-md);
+		background: var(--bg-secondary);
+		border-radius: var(--radius-sm);
+		border-left: 3px solid transparent;
 	}
 
 	.message.highlight {
-		font-weight: bold;
+		background: var(--bg-tertiary);
+		border-left-color: var(--color-highlight);
+	}
+
+	.message-speaker {
+		color: var(--text-secondary);
+		font-size: 0.875rem;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+	}
+
+	.ai-source {
+		color: var(--color-claude);
+		font-weight: 400;
+	}
+
+	.message-content {
+		color: var(--text-primary);
+		line-height: 1.6;
+	}
+
+	.message-annotation {
+		color: var(--color-highlight);
+		font-size: 0.875rem;
+		font-style: italic;
+		padding-top: var(--space-xs);
+		border-top: 1px solid var(--bg-tertiary);
 	}
 </style>

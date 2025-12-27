@@ -3,15 +3,15 @@
 
 import { describe, it, expect, beforeEach } from 'vitest';
 import type { TranscriptService } from '$lib/contracts';
-import { mockTranscriptService } from './transcript.service.mock';
+import { transcriptService } from './transcript.service';
 
 // This will be swapped between mock and real implementation
 let service: TranscriptService;
 
 describe('TranscriptService', () => {
 	beforeEach(() => {
-		// Wire the mock service for Phase 4
-		service = mockTranscriptService;
+		// Phase 6: Using real implementation
+		service = transcriptService;
 	});
 
 	describe('getByProjectSlug', () => {

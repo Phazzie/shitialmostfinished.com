@@ -37,10 +37,17 @@
 	.project-card {
 		display: flex;
 		flex-direction: column;
-		gap: 0.5rem;
-		padding: 1rem;
-		border: 1px solid #ccc;
-		border-radius: 0.5rem;
+		gap: var(--space-sm);
+		padding: var(--space-md);
+		background: var(--bg-secondary);
+		border: 1px solid var(--bg-tertiary);
+		border-radius: var(--radius-md);
+		transition: all 0.2s ease;
+	}
+
+	.project-card:hover {
+		background: var(--bg-tertiary);
+		border-color: var(--color-accent);
 	}
 
 	.card-header {
@@ -49,15 +56,41 @@
 		align-items: center;
 	}
 
+	.project-title {
+		color: var(--text-primary);
+		margin: 0;
+		font-size: 1.125rem;
+	}
+
 	.project-meta {
 		display: flex;
-		gap: 0.5rem;
+		gap: var(--space-sm);
 		font-size: 0.875rem;
+		color: var(--text-secondary);
+	}
+
+	.project-wing {
+		color: var(--color-accent);
+		font-weight: 600;
+	}
+
+	.project-ai-source {
+		color: var(--color-claude);
+	}
+
+	.has-transcript {
+		color: var(--color-highlight);
+	}
+
+	.project-pitch {
+		color: var(--text-primary);
+		margin: var(--space-sm) 0;
+		line-height: 1.5;
 	}
 
 	.project-tags {
 		display: flex;
-		gap: 0.25rem;
+		gap: var(--space-xs);
 		flex-wrap: wrap;
 	}
 </style>
