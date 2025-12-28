@@ -125,7 +125,7 @@ Phase 8: Data & Deploy (Real content + deployment)
    - `Wing` type: 'music' | 'apps' | 'stories' | 'process' | 'finished'
    - `ProcessTag` type: 5 tags (THE_BREAKTHROUGH, THE_ARGUMENT, etc.)
    - `AISource` type: 'claude' | 'chatgpt' | 'gemini' | 'mixed'
-   - `Project` interface (16 properties)
+   - `Project` interface (13 properties)
    - `ProjectService` interface (4 async methods)
    - `WING_CONFIGS` constant (icons, names, colors for 5 wings)
 
