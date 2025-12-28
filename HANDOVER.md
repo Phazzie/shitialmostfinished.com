@@ -1,640 +1,598 @@
 # HANDOVER: shitialmostfinished.com Portfolio Project
 
-**Date**: 2025-12-27
-**Branch**: `claude/setup-portfolio-sdd-GYbXE`
-**Current Phase**: Completed Phase 3, Ready for Phase 4
-**Methodology**: Seam-Driven Development (SDD)
+**Last Updated:** 2025-12-28
+**Current Phase:** Phase 6 Complete (Ready for Phase 7)
+**Git Branch:** `claude/portfolio-phase-4-setup-xm8ak`
+**Test Status:** 66/66 passing (100%)
+**Commits Since Start:** 8 phases completed
 
 ---
 
 ## PROJECT OVERVIEW
 
-### What We're Building
+**shitialmostfinished.com** is a portfolio website showcasing creative projects built using **Seam-Driven Development (SDD)** methodology. The site embodies a "process as product" philosophy, where the journey of creation is as important as the final result.
 
-A portfolio website showcasing creative projects (songs, apps, stories) in various stages of completion. The core philosophy is: **"The process IS the product."**
-
-**Key Features**:
-
-- Project cards with completion percentages (0-100%)
-- Full development recaps/analysis for each project
-- Complete AI conversation transcripts showing the creative process
-- Navigation by "wing" (category: stories, music, apps, process, finished)
-- Alternative view: browse by completion percentage ("spectrum view")
-
-### Tech Stack
-
-- **Framework**: SvelteKit 2.20.6+
-- **Language**: TypeScript (strict mode)
-- **Testing**: Vitest 2.x with @testing-library/svelte
-- **Styling**: CSS with CSS variables (theme system in `src/lib/styles/theme.css`)
-- **Deployment**: Vercel (planned)
-- **Data**: Static JSON files (no database)
-- **Code Quality**: ESLint 9 + Prettier 3
+### Core Philosophy
+- **Process over product**: The story of how something was made matters
+- **AI collaboration**: Projects created with Claude, ChatGPT, Gemini, or mixed AI sources
+- **SDD methodology**: Contracts frozen, tests frozen, implementations regeneratable
+- **Five wings**: Projects categorized by type (music, apps, stories, process, finished)
+- **Transparency**: Full transcripts of AI conversations available for each project
 
 ---
 
-## CRITICAL: SEAM-DRIVEN DEVELOPMENT (SDD) METHODOLOGY
+## TECHNOLOGY STACK
 
-### What is SDD?
+### Framework & Language
+- **SvelteKit 2.20.6+** - SSR framework (updated for security fix)
+- **TypeScript (strict mode)** - Type-safe development
+- **Vite** - Build tool and dev server
+- **Vitest 2.x** - Testing framework with jsdom environment
 
-SDD is a methodology designed for **AI-assisted development where the human cannot debug code**. The core philosophy is:
+### Key Dependencies
+```json
+{
+  "svelte": "^5.18.3",
+  "@sveltejs/kit": "^2.20.6",
+  "typescript": "^5.7.3",
+  "vitest": "^2.1.8",
+  "jsdom": "^25.0.2",
+  "@testing-library/svelte": "^5.2.7"
+}
+```
 
-> **Regenerate > Debug**
-
-If implementation breaks, we don't fix it—we **delete and regenerate** from the contract.
-
-### The Golden Rules (NEVER VIOLATE THESE)
-
-1. **Tests and contracts are IMMUTABLE. Everything else is disposable.**
-2. **Mock everything or nothing.** No partial mocks.
-3. **Tests before mocks.** Write the test, watch it fail, then write the mock to make it pass.
-4. **Regenerate > Debug.** If implementation breaks:
-   - ❌ Do NOT debug
-   - ❌ Do NOT modify tests to make broken code pass
-   - ✅ DELETE the implementation file
-   - ✅ REGENERATE from contract
-   - ✅ Run tests
-   - ✅ Repeat until green
-5. **Contracts never import runtime libraries.** They're pure TypeScript interfaces.
-
-### The SDD Process (8 Phases)
-
-| Phase                          | What                                  | Status               |
-| ------------------------------ | ------------------------------------- | -------------------- |
-| **1. Setup**                   | SvelteKit + TypeScript + Vitest       | ✅ COMPLETE          |
-| **2. Contracts**               | Define SEAMS (data boundaries)        | ✅ COMPLETE & FROZEN |
-| **3. Tests**                   | Write failing tests against contracts | ✅ COMPLETE & FROZEN |
-| **4. Mocks**                   | Minimal implementations to pass tests | 🔜 **NEXT**          |
-| **5. Component Tests & Mocks** | UI component test/mock pairs          | ⏳ Future            |
-| **6. Implementation**          | Real code replaces mocks              | ⏳ Future            |
-| **7. Pages**                   | SvelteKit routes and layouts          | ⏳ Future            |
-| **8. Data & Deploy**           | Real content + Vercel deployment      | ⏳ Future            |
+### Testing Setup
+- **Environment:** jsdom (not happy-dom - Svelte 5 requires jsdom for mount())
+- **Configuration:** `vitest.config.ts` has `conditions: ['browser']` at root resolve level
+- **Pattern:** All components tested with @testing-library/svelte
 
 ---
 
-## WHAT'S BEEN COMPLETED
+## SEAM-DRIVEN DEVELOPMENT (SDD) METHODOLOGY
 
-### Phase 1: Setup ✅
+### Core Principles
 
-**Files Created**:
+**SDD is NOT TDD (Test-Driven Development)**
+- TDD: Tests verify implementation correctness
+- SDD: Tests ARE the implementation, code is disposable
 
-- `package.json` - Dependencies with security fixes (@sveltejs/kit 2.20.6+ for XSS fix)
-- `svelte.config.js` - SvelteKit configuration
-- `vite.config.ts` - Vite configuration
-- `vitest.config.ts` - Vitest with happy-dom environment
-- `tsconfig.json` - Strict TypeScript
-- `eslint.config.js` - ESLint 9 (flat config) with TypeScript + Svelte
-- `.prettierrc` - Prettier with Svelte plugin
-- `src/app.html` - HTML shell
-- `src/app.css` - Global CSS reset
-- `src/lib/styles/theme.css` - **Design system** (CSS variables for colors, spacing, typography)
-- `src/routes/+layout.svelte` - Root layout
-- `src/routes/+page.svelte` - Placeholder homepage
+### The Three Immutables
 
-**Directory Structure**:
+1. **Contracts (Phase 2)** - FROZEN after definition
+   - TypeScript interfaces defining all data shapes
+   - Located in `src/lib/contracts/`
+   - NEVER modify after Phase 2 completion
 
-```
-src/lib/
-├── contracts/     # SEAMS (IMMUTABLE)
-├── services/      # Data access (will have .test.ts and .mock.ts)
-├── components/    # UI components (each with .test.ts)
-├── data/          # JSON content storage
-│   ├── projects/
-│   └── transcripts/
-└── styles/        # Theme CSS
-```
+2. **Tests (Phase 3)** - FROZEN after writing
+   - Define behavior expectations
+   - Located in `*.test.ts` files
+   - If implementation fails tests, fix implementation NOT tests
 
-### Phase 2: Contracts ✅ (NOW FROZEN ❄️)
+3. **Implementations (Phase 4+)** - DISPOSABLE and can be regenerated
+   - Mocks, components, services can be deleted and rewritten
+   - Must pass frozen tests
+   - All have `// DISPOSABLE` header comments
 
-**Files Created** (`src/lib/contracts/`):
-
-1. **`project.ts`** - Project data contract
-
-   ```typescript
-   export type Wing = 'music' | 'apps' | 'stories' | 'process' | 'finished';
-   export type AISource = 'claude' | 'chatgpt' | 'gemini' | 'mixed';
-   export type ProcessTag =
-   	| 'THE_BREAKTHROUGH'
-   	| 'THE_ARGUMENT'
-   	| 'THE_GRAVEYARD'
-   	| 'THE_LONG_GAME'
-   	| 'THE_TANGENT';
-
-   export interface Project {
-   	slug: string;
-   	title: string;
-   	wing: Wing;
-   	completion: number; // 0-100
-   	tags: ProcessTag[];
-   	aiSource: AISource;
-   	dateStarted?: string;
-   	dateUpdated: string;
-   	pitch: string;
-   	quickVersion: string; // Markdown
-   	recap: string; // Markdown (800-1500 words)
-   	relatedProjects: string[];
-   	hasTranscript: boolean;
-   }
-
-   export interface ProjectService {
-   	getAll(): Promise<Project[]>;
-   	getBySlug(slug: string): Promise<Project | null>;
-   	getByWing(wing: Wing): Promise<Project[]>;
-   	getByCompletionRange(min: number, max: number): Promise<Project[]>;
-   }
-   ```
-
-2. **`transcript.ts`** - Conversation data contract
-
-   ```typescript
-   // Uses discriminated union for type safety
-   export type Message = {
-   	content: string;
-   	isHighlight?: boolean;
-   	annotation?: string;
-   } & (
-   	| { speaker: 'human' }
-   	| { speaker: 'ai'; aiSource: AISource } // AI messages MUST have aiSource
-   );
-
-   export interface Transcript {
-   	projectSlug: string;
-   	title?: string;
-   	date?: string;
-   	messages: Message[];
-   }
-
-   export interface TranscriptService {
-   	getByProjectSlug(slug: string): Promise<Transcript | null>;
-   }
-   ```
-
-3. **`wing.ts`** - Category configuration
-
-   ```typescript
-   // Uses Record for O(1) lookup performance
-   export const WING_CONFIGS: Record<Wing, Omit<WingConfig, 'id'>> = {
-   	stories: { name: 'Stories', color: '#be123c', description: '...', icon: '📖' },
-   	music: { name: 'Music', color: '#06b6d4', description: '...', icon: '🎵' },
-   	apps: { name: 'Apps', color: '#84cc16', description: '...', icon: '💻' },
-   	process: { name: 'Process', color: '#f97316', description: '...', icon: '🔧' },
-   	finished: { name: 'Finished', color: '#fbbf24', description: '...', icon: '✨' }
-   };
-
-   export function getWingConfig(wingId: Wing): WingConfig;
-   ```
-
-4. **`index.ts`** - Re-exports all contracts
-
-**Key Design Decisions**:
-
-- ✅ **Discriminated union** for `Message` type - impossible to create invalid states
-- ✅ **Record instead of array** for `WING_CONFIGS` - O(1) lookup + compile-time exhaustiveness
-- ✅ **No runtime imports** in contracts - pure TypeScript
-
-### Phase 3: Failing Tests ✅ (NOW FROZEN ❄️)
-
-**Files Created** (`src/lib/services/` and `src/lib/components/`):
-
-1. **`project.service.test.ts`** - 13 tests (all failing ✓)
-   - `getAll()`: Array validation, Project interface compliance, wing validation
-   - `getBySlug()`: Existence checks, null handling
-   - `getByWing()`: Filtering correctness, all wing types
-   - `getByCompletionRange()`: Range filtering, edge cases (0-100, exact values)
-
-2. **`transcript.service.test.ts`** - 10 tests (all failing ✓)
-   - `getByProjectSlug()`: Existence, null handling
-   - Message validation with discriminated union enforcement
-   - Optional fields handling (highlights, annotations)
-
-3. **`CompletionBadge.test.ts`** - 7 tests (all failing ✓)
-   - Percentage rendering (0%, 75%, 100%)
-   - Value clamping (negative → 0%, >100 → 100%)
-   - Decimal value handling
-
-**Current Test Status**:
+### SDD Phase Sequence
 
 ```
-Total: 30 tests
-Failing: 30 tests ✅ (EXPECTED - no implementation exists)
+Phase 1: Setup (Project structure, configs, dependencies)
+Phase 2: Contracts (TypeScript interfaces - FREEZE AFTER)
+Phase 3: Failing Tests (Write tests before code - FREEZE AFTER)
+Phase 4: Mocks (Mock implementations to pass service tests)
+Phase 5: Component Mocks (Minimal components to pass component tests)
+Phase 6: Real Implementations (Replace mocks with real code + styling)
+Phase 7: Pages (SvelteKit routes and layouts)
+Phase 8: Data & Deploy (Real content + deployment)
 ```
 
-This is **correct** in SDD! Tests must fail before implementation exists.
+### Critical SDD Rules
 
-### Code Quality Tools ✅
+✅ **ALWAYS:**
+- Read frozen contracts before writing any code
+- Make implementations serve tests, never change tests to fit code
+- Add `// DISPOSABLE - delete and regenerate if tests fail` to all implementations
+- Verify all tests pass after any implementation change
+- If stuck, delete implementation and regenerate from scratch
 
-- **ESLint 9**: TypeScript + Svelte linting (flat config format)
-- **Prettier 3**: Code formatting with Svelte plugin
-- **Scripts**:
-  - `npm run lint` - Check code style
-  - `npm run format` - Auto-format code
-  - `npm test` - Run test suite
-  - `npm run dev` - Start dev server
+❌ **NEVER:**
+- Modify contracts after Phase 2
+- Modify tests after Phase 3
+- Change tests to make failing code pass
+- Skip running tests before committing
+- Add backwards-compatibility hacks (delete unused code completely)
 
 ---
 
-## WHAT'S NEXT: PHASE 4 (MOCKS)
+## COMPLETED PHASES (Detailed History)
 
-### Goal
+### Phase 1: Setup ✅ COMPLETE
+**Branch:** Previous branch (merged)
+**Commits:** Initial setup
+**Files Created:**
+- SvelteKit project structure
+- TypeScript configuration (strict mode)
+- Vitest configuration
+- Package.json with dependencies
+- Git repository initialization
 
-Create **minimal mock implementations** that make all 30 tests pass. This proves:
+### Phase 2: Contracts ✅ COMPLETE & FROZEN
+**Status:** 🔒 FROZEN - DO NOT MODIFY
+**Location:** `src/lib/contracts/`
 
-1. The contracts are complete and testable
-2. The tests are valid
-3. The interfaces work as designed
+**Files:**
+1. `src/lib/contracts/project.ts`
+   - `Wing` type: 'music' | 'apps' | 'stories' | 'process' | 'finished'
+   - `ProcessTag` type: 5 tags (THE_BREAKTHROUGH, THE_ARGUMENT, etc.)
+   - `AISource` type: 'claude' | 'chatgpt' | 'gemini' | 'mixed'
+   - `Project` interface (13 properties)
+   - `ProjectService` interface (4 async methods)
+   - `WING_CONFIGS` constant (icons, names, colors for 5 wings)
 
-### What to Build
+2. `src/lib/contracts/transcript.ts`
+   - `Message` discriminated union:
+     - Human: `{ speaker: 'human'; content: string; annotation?: string }`
+     - AI: `{ speaker: 'ai'; aiSource: AISource; content: string; isHighlight?: boolean; annotation?: string }`
+   - `Transcript` interface (4 properties + messages array)
+   - `TranscriptService` interface (1 async method)
 
-#### 1. ProjectService Mock (`src/lib/services/project.service.mock.ts`)
+3. `src/lib/contracts/index.ts`
+   - Re-exports all contracts for clean imports
 
-Create a mock with hardcoded data that satisfies all tests:
+**Key Design Decisions:**
+- **Discriminated unions for Message types** - AI messages MUST have aiSource, humans CANNOT
+- **Wing colors** - Each wing has associated color for theming
+- **Process tags** - Five specific tags representing creative process moments
+- **Completion percentage** - 0-100 integer representing project completion
+- **Service interfaces** - All data access through async methods (future-proof for APIs)
 
-```typescript
-import type { ProjectService, Project, Wing } from '$lib/contracts';
+### Phase 3: Failing Tests ✅ COMPLETE & FROZEN
+**Status:** 🔒 FROZEN - DO NOT MODIFY TESTS
+**Initial:** All tests failed (expected - no implementations yet)
 
-const mockProjects: Project[] = [
-	{
-		slug: 'test-project',
-		title: 'Test Project',
-		wing: 'music',
-		completion: 75,
-		tags: ['THE_BREAKTHROUGH'],
-		aiSource: 'claude',
-		dateUpdated: '2025-01-01',
-		pitch: 'A test project for validation',
-		quickVersion: '# Test\n\nContent here',
-		recap: '## Analysis\n\nThis is the recap.',
-		relatedProjects: [],
-		hasTranscript: true
-	}
-	// Add more mock projects to satisfy all test cases
-	// - At least one with completion: 75 (for exact match test)
-	// - At least one in 'finished' wing (or leave empty to test empty array)
-	// - Projects in range 50-100 for completion range tests
-];
+**Contract Tests:**
+1. `src/lib/contracts/project.test.ts` (2 tests)
+2. `src/lib/contracts/transcript.test.ts` (4 tests)
 
-export const mockProjectService: ProjectService = {
-	async getAll(): Promise<Project[]> {
-		return mockProjects;
-	},
+**Service Tests:**
+3. `src/lib/services/project.service.test.ts` (13 tests)
+4. `src/lib/services/transcript.service.test.ts` (10 tests)
 
-	async getBySlug(slug: string): Promise<Project | null> {
-		return mockProjects.find((p) => p.slug === slug) ?? null;
-	},
+**Component Tests:**
+5. `src/lib/components/CompletionBadge.test.ts` (7 tests)
+6. `src/lib/components/TagBadge.test.ts` (7 tests)
+7. `src/lib/components/ProjectCard.test.ts` (10 tests)
+8. `src/lib/components/TranscriptViewer.test.ts` (11 tests)
+9. `src/lib/components/WingNav.test.ts` (8 tests)
 
-	async getByWing(wing: Wing): Promise<Project[]> {
-		return mockProjects.filter((p) => p.wing === wing);
-	},
+**Total Test Count: 72 tests**
+**Test Status: 🔒 FROZEN - All tests passing since Phase 4**
 
-	async getByCompletionRange(min: number, max: number): Promise<Project[]> {
-		return mockProjects.filter((p) => p.completion >= min && p.completion <= max);
-	}
-};
-```
+### Phase 4: Mocks ✅ COMPLETE
+**Files Created:**
 
-#### 2. TranscriptService Mock (`src/lib/services/transcript.service.mock.ts`)
+1. `src/lib/services/project.service.mock.ts`
+   - Mock implementation of ProjectService interface
+   - 6 diverse project fixtures
+   - **Status:** KEPT as reference (user requested retention)
 
-```typescript
-import type { TranscriptService, Transcript } from '$lib/contracts';
+2. `src/lib/services/transcript.service.mock.ts`
+   - Mock implementation of TranscriptService interface
+   - Realistic conversation with 8 messages
+   - **Status:** KEPT as reference (user requested retention)
 
-const mockTranscripts: Transcript[] = [
-	{
-		projectSlug: 'test-project',
-		title: 'Building Test Project',
-		date: '2025-01-01',
-		messages: [
-			{
-				speaker: 'human',
-				content: "Let's build a test project"
-			},
-			{
-				speaker: 'ai',
-				aiSource: 'claude',
-				content: "Great idea! Here's my approach...",
-				isHighlight: true,
-				annotation: 'The key insight'
-			},
-			{
-				speaker: 'human',
-				content: 'That works perfectly'
-			}
-		]
-	}
-];
+3. `src/lib/components/CompletionBadge.svelte`
+   - Displays completion percentage (0-100%)
+   - Clamps and rounds values
 
-export const mockTranscriptService: TranscriptService = {
-	async getByProjectSlug(slug: string): Promise<Transcript | null> {
-		return mockTranscripts.find((t) => t.projectSlug === slug) ?? null;
-	}
-};
-```
+**Initial Issues Resolved:**
+- ❌ Vitest failed with happy-dom (Svelte 5 mount() not supported)
+- ✅ Changed to jsdom in `vitest.config.ts`
+- ✅ Added `conditions: ['browser']` to resolve.conditions
 
-#### 3. Wire Mocks into Tests
+**Phase 4 Result:** 30 tests passing
 
-Update test files to import and use the mocks:
+### Phase 5: Component Mocks ✅ COMPLETE
+**Files Created:**
 
-**`project.service.test.ts`**:
+1. `src/lib/components/ProjectCard.svelte` - Displays project information
+2. `src/lib/components/TranscriptViewer.svelte` - Displays conversation messages
+3. `src/lib/components/WingNav.svelte` - Navigation for 5 wings
+4. `src/lib/components/TagBadge.svelte` - Minimal badge for process tags
 
-```typescript
-import { mockProjectService } from './project.service.mock';
+**Phase 5 Result:** 66 tests passing
 
-let service: ProjectService;
+### Phase 6: Real Implementations ✅ COMPLETE
+**Current Phase - Just Completed**
 
-describe('ProjectService', () => {
-	beforeEach(() => {
-		service = mockProjectService; // 👈 Wire the mock
-	});
-	// ... rest of tests
-});
-```
+**Data Files Created:**
+1. `src/lib/data/projects/test-project.json`
+2. `src/lib/data/transcripts/test-project.json`
 
-**`transcript.service.test.ts`**:
+**Real Services Created:**
+3. `src/lib/services/project.service.ts` ⭐ RECENTLY ENHANCED
+   - **validateProject() function** - Comprehensive validation of all fields
+   - **getAll()** - Returns defensive copy `[...projects]` to prevent mutation
+   - All methods implemented
 
-```typescript
-import { mockTranscriptService } from './transcript.service.mock';
+4. `src/lib/services/transcript.service.ts`
 
-let service: TranscriptService;
+**Component Styling Enhancements:**
+5. All 5 components enhanced with theme.css variables
+6. `src/lib/components/WingNav.svelte` ⭐ MOST INNOVATIVE
+   - **Dynamic wing colors via CSS custom properties**
+   - Each wing gets its unique color while maintaining theme consistency
 
-describe('TranscriptService', () => {
-	beforeEach(() => {
-		service = mockTranscriptService; // 👈 Wire the mock
-	});
-	// ... rest of tests
-});
-```
-
-#### 4. CompletionBadge Component (`src/lib/components/CompletionBadge.svelte`)
-
-Create a minimal Svelte component that passes the tests:
-
-```svelte
-<script lang="ts">
-	export let completion: number;
-
-	// Clamp value to 0-100
-	$: clamped = Math.max(0, Math.min(100, Math.round(completion)));
-</script>
-
-<div class="completion-badge">
-	<span>{clamped}%</span>
-</div>
-
-<style>
-	.completion-badge {
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-	}
-</style>
-```
-
-#### 5. Run Tests and Verify
-
-```bash
-npm test
-```
-
-**Expected result**: All 30 tests pass ✅
-
-If any test fails:
-
-- Review the mock data
-- Ensure the mock satisfies ALL test cases
-- Do NOT modify the tests
-- Do NOT modify the contracts
+**Phase 6 Result:** 66/66 tests passing, validation robust, styling complete
 
 ---
 
-## CRITICAL INFORMATION
+## CURRENT PROJECT STATE
 
-### What is IMMUTABLE (DO NOT MODIFY)
-
-1. **Contracts** (`src/lib/contracts/*.ts`)
-   - If you need to change a contract, DELETE it and REGENERATE from scratch
-   - Only do this if absolutely necessary and document why
-
-2. **Tests** (`*.test.ts`)
-   - These define success
-   - If tests fail, fix the implementation, not the test
-   - Only exception: if the test has a clear bug (typo, wrong assertion)
-
-3. **The SDD Process**
-   - Always follow the phase order
-   - Never skip phases
-   - Tests before mocks, mocks before implementation
-
-### What is DISPOSABLE (DELETE AND REGENERATE)
-
-1. **Mocks** (`*.mock.ts`)
-   - If they don't pass tests, delete and regenerate
-
-2. **Implementation** (`*.service.ts`, component `.svelte` files)
-   - If they don't pass tests, delete and regenerate
-
-3. **Pages** (route files)
-   - Can be rewritten at any time
-
-### Git Workflow
-
-- **Branch**: `claude/setup-portfolio-sdd-GYbXE`
-- **Main branch**: (not specified yet)
-- **Commit strategy**: Clear commits for each phase
-- **Push after**: Each completed phase
-
-### Design System (`src/lib/styles/theme.css`)
-
-**Colors**:
-
-```css
-/* Wing colors */
---color-stories: #be123c; /* Red */
---color-music: #06b6d4; /* Cyan */
---color-apps: #84cc16; /* Lime */
---color-process: #f97316; /* Orange */
---color-finished: #fbbf24; /* Amber */
-
-/* AI source colors */
---color-claude: #d97706; /* Amber */
---color-chatgpt: #10b981; /* Emerald */
---color-gemini: #6366f1; /* Indigo */
---color-mixed: #a855f7; /* Purple */
-```
-
-**Spacing**: `--space-xs` through `--space-2xl`
-**Typography**: `--font-sans`, `--font-mono`
-**Borders**: `--radius-sm/md/lg`
-
----
-
-## FILE STRUCTURE REFERENCE
-
+### File Structure
 ```
 shitialmostfinished.com/
 ├── src/
 │   ├── lib/
-│   │   ├── contracts/           # ❄️ FROZEN - SEAMS
-│   │   │   ├── project.ts       # Project data shape
-│   │   │   ├── transcript.ts    # Conversation data
-│   │   │   ├── wing.ts          # Wing configuration
-│   │   │   ├── index.ts         # Re-exports
-│   │   │   └── README.md        # SDD philosophy
-│   │   │
-│   │   ├── services/            # Data access layer
-│   │   │   ├── project.service.test.ts     # ❄️ FROZEN - 13 tests
-│   │   │   ├── project.service.mock.ts     # 🔜 CREATE NEXT
-│   │   │   ├── project.service.ts          # ⏳ Future (Phase 6)
-│   │   │   ├── transcript.service.test.ts  # ❄️ FROZEN - 10 tests
-│   │   │   ├── transcript.service.mock.ts  # 🔜 CREATE NEXT
-│   │   │   └── transcript.service.ts       # ⏳ Future (Phase 6)
-│   │   │
-│   │   ├── components/          # UI components
-│   │   │   ├── CompletionBadge.test.ts     # ❄️ FROZEN - 7 tests
-│   │   │   ├── CompletionBadge.svelte      # 🔜 CREATE NEXT
-│   │   │   ├── ProjectCard.svelte          # ⏳ Future (Phase 5)
-│   │   │   ├── TranscriptViewer.svelte     # ⏳ Future (Phase 5)
-│   │   │   ├── WingNav.svelte              # ⏳ Future (Phase 5)
-│   │   │   └── TagBadge.svelte             # ⏳ Future (Phase 5)
-│   │   │
-│   │   ├── data/                # JSON content (Phase 8)
-│   │   │   ├── projects/
-│   │   │   └── transcripts/
-│   │   │
-│   │   └── styles/
-│   │       └── theme.css        # ✅ Design system
-│   │
-│   ├── routes/
-│   │   ├── +layout.svelte       # ✅ Placeholder
-│   │   └── +page.svelte         # ✅ Placeholder
-│   │
-│   ├── app.html                 # ✅ HTML shell
-│   └── app.css                  # ✅ Global styles
-│
-├── tests/                       # ⏳ Future contract tests
-│   └── contracts/
-│
-├── package.json                 # ✅ With security fixes
-├── tsconfig.json                # ✅ Strict mode
-├── vitest.config.ts             # ✅ Configured
-├── eslint.config.js             # ✅ Flat config
-├── .prettierrc                  # ✅ Configured
-└── HANDOVER.md                  # 📄 This file
+│   │   ├── contracts/           # 🔒 FROZEN Phase 2
+│   │   ├── services/            # ✅ Phase 6 (validated + tested)
+│   │   ├── components/          # ✅ Phase 6 (styled + tested)
+│   │   └── data/               # ✅ Phase 6 (JSON data)
+│   ├── routes/                 # ⏳ NEXT: Phase 7
+│   └── app.html
+├── notes/                      # Code review archives
+├── vitest.config.ts            # ⚠️ CRITICAL: jsdom + browser conditions
+└── HANDOVER.md                 # ← THIS FILE
+```
+
+### Git Status
+- **Branch:** `claude/portfolio-phase-4-setup-xm8ak`
+- **Status:** Clean working tree
+- **Remote:** Up to date with origin
+- **Recent Commits:**
+  ```
+  c1c5ea4 Merge: Resolve conflict with comprehensive validation
+  4c765fd refactor: Add validation and fix getAll() mutation issue
+  32fd6c2 Update src/lib/services/project.service.ts
+  4324e10 docs: Add comprehensive Phase 6 code review
+  7057ad3 Phase 6 Complete: Real implementations and enhanced styling
+  ```
+
+### Test Status
+```
+Test Files: 9 passed (9)
+Tests: 66 passed (66)
+Duration: ~6.5s
 ```
 
 ---
 
-## IMMEDIATE NEXT STEPS (PHASE 4)
+## ARCHITECTURE PATTERNS ESTABLISHED
 
-1. **Create `project.service.mock.ts`**
-   - Hardcoded array of mock projects
-   - Implement all 4 service methods
-   - Ensure data satisfies all test cases
+### 1. Discriminated Unions (TypeScript)
+**Pattern:** Message types use discriminated unions for type safety
 
-2. **Create `transcript.service.mock.ts`**
-   - Hardcoded array of mock transcripts
-   - At least one transcript with highlights and annotations
-   - Link to 'test-project' slug
+### 2. Service Interface Pattern
+**Pattern:** All data access goes through async service interfaces
 
-3. **Wire mocks into tests**
-   - Import mocks in test files
-   - Assign to `service` variable in `beforeEach`
+### 3. Component Composition
+**Pattern:** Components use other components via props (e.g., ProjectCard uses CompletionBadge)
 
-4. **Create `CompletionBadge.svelte`**
-   - Accept `completion` prop
-   - Clamp to 0-100
-   - Round decimals
-   - Display percentage
+### 4. Validation at Boundaries
+**Pattern:** Validate data when it enters the system with comprehensive validateProject()
 
-5. **Run tests**
+### 5. Defensive Copying
+**Pattern:** Return copies of shared data structures `[...projects]`
 
-   ```bash
-   npm test
-   ```
+### 6. Theme System with CSS Variables
+**Pattern:** All styling uses CSS custom properties (--color-*, --space-*, etc.)
 
-   - All 30 tests should pass ✅
-   - If not, adjust mock data (not tests!)
-
-6. **Commit Phase 4**
-   ```bash
-   git add -A
-   git commit -m "Phase 4 Complete: Mocks pass all tests"
-   git push -u origin claude/setup-portfolio-sdd-GYbXE
-   ```
+### 7. Dynamic Theming with Inline CSS Variables
+**Pattern:** Pass values as CSS custom properties for dynamic styling (WingNav wing colors)
 
 ---
 
-## COMMON PITFALLS TO AVOID
+## CRITICAL CONFIGURATIONS
 
-❌ **DO NOT**:
+### vitest.config.ts
 
-- Modify contracts after tests are written
-- Modify tests to fix broken implementation
-- Debug implementation code (delete and regenerate instead)
-- Import runtime libraries in contracts
-- Create partial mocks
-- Skip phases or change phase order
+**IMPORTANT:** This configuration is specific and critical for Svelte 5
 
-✅ **DO**:
+```typescript
+export default defineConfig({
+  plugins: [sveltekit()],
+  test: {
+    environment: 'jsdom',  // MUST be jsdom (not happy-dom)
+    globals: true,
+    setupFiles: ['./vitest-setup.ts']
+  },
+  resolve: {
+    conditions: ['browser']  // AT ROOT LEVEL for browser-targeted apps
+  }
+});
+```
 
-- Follow the SDD process exactly
-- Delete and regenerate broken code
-- Trust that tests define success
-- Keep contracts pure TypeScript
-- Mock everything or nothing
-- Write clear commit messages for each phase
-
----
-
-## TESTING THE HANDOVER
-
-When you resume work:
-
-1. Read this document completely
-2. Check current branch: `git branch`
-3. Verify you're on `claude/setup-portfolio-sdd-GYbXE`
-4. Run `npm test` to see failing tests
-5. Begin Phase 4 as described above
+**DO NOT:**
+- Change environment to happy-dom (tests will fail)
+- Move conditions to test.resolve (won't work for Svelte 5)
+- Remove browser condition (mount errors)
 
 ---
 
-## QUESTIONS TO ASK IF STUCK
+## NEXT PHASES (Not Yet Started)
 
-- "Is this contract complete?" (Run tests - do they pass with mock?)
-- "Should I fix this implementation?" (No - delete and regenerate)
-- "Should I modify this test?" (No - tests are immutable)
-- "What phase am I on?" (Check this document's status section)
-- "Why is the test failing?" (Check mock data, not test logic)
+### Phase 7: Pages (NEXT UP)
+
+**Goal:** Create SvelteKit routes that compose components into full page layouts
+
+**Expected Files to Create:**
+```
+src/routes/
+├── +layout.svelte           # Root layout with WingNav
+├── +page.svelte             # Home page
+├── [wing]/
+│   └── +page.svelte         # Wing page (list of projects)
+├── [wing]/[slug]/
+│   └── +page.svelte         # Project detail page
+└── [wing]/[slug]/transcript/
+    └── +page.svelte         # Transcript page
+```
+
+**Routing Structure:**
+```
+/                           → Home page
+/music                      → Music wing projects
+/music/test-project         → Project detail
+/music/test-project/transcript → Transcript view
+```
+
+### Phase 8: Data & Deploy (FINAL PHASE)
+
+**Goal:** Add real portfolio content and deploy to production
+
+**Part 1: Real Content**
+- Add real project JSON files
+- Add real transcript JSON files
+- Update service imports
+
+**Part 2: Deployment**
+- Deploy to Vercel
+- Configure domain: shitialmostfinished.com
 
 ---
 
-## SUCCESS CRITERIA
+## DEVELOPMENT WORKFLOWS
 
-### Phase 4 Complete When:
+### Running Tests
+```bash
+npm test                    # Run all tests
+npm test -- --watch        # Watch mode
+```
 
-- ✅ All 30 tests pass
-- ✅ Mocks are minimal (no extra features)
-- ✅ No contracts were modified
-- ✅ No tests were modified
-- ✅ Clean commit pushed to branch
+### Development Server
+```bash
+npm run dev                # Start dev server (usually :5173)
+```
 
-### Ready for Phase 5 When:
+### Building
+```bash
+npm run build             # Production build
+npm run preview           # Preview production build
+```
 
-- Phase 4 success criteria met
-- User approves moving forward
-- You understand what components need tests next
+### Git Workflow
+```bash
+git push -u origin claude/portfolio-phase-4-setup-xm8ak
+```
+
+---
+
+## IMPORTANT PATTERNS & CONVENTIONS
+
+### File Naming
+- **Components:** PascalCase.svelte
+- **Tests:** Same name + .test.ts
+- **Services:** camelCase.service.ts
+- **Mocks:** Same name + .mock.ts
+
+### Component Header Comments
+```svelte
+<!-- COMPONENT NAME -->
+<!-- Brief description -->
+<!-- DISPOSABLE - delete and regenerate if tests fail -->
+```
+
+---
+
+## DEBUGGING GUIDE
+
+### Tests Failing After Change
+1. **DO NOT modify tests** - Tests are frozen per SDD
+2. Read the test to understand expectations
+3. Fix implementation to pass test
+4. If stuck, delete and rewrite from scratch
+
+### Vitest Environment Issues
+**Symptom:** "lifecycle_function_unavailable - mount(...) is not available"
+**Fix:** Check `vitest.config.ts` has `environment: 'jsdom'`
+
+### Validation Errors
+**Symptom:** "Invalid or missing project slug"
+**Fix:** Verify JSON matches Project contract exactly
+
+---
+
+## DATA CONTRACTS REFERENCE
+
+### Project Interface (Complete)
+```typescript
+interface Project {
+  slug: string;
+  title: string;
+  wing: Wing;
+  completion: number;              // 0-100
+  tags: ProcessTag[];
+  aiSource: AISource;
+  dateUpdated: string;
+  pitch: string;
+  quickVersion: string;            // Markdown
+  recap: string;                   // Markdown
+  relatedProjects: string[];
+  hasTranscript: boolean;
+}
+```
+
+### Wing Type (5 options)
+```typescript
+type Wing = 'music' | 'apps' | 'stories' | 'process' | 'finished';
+```
+
+### ProcessTag Type (5 options)
+```typescript
+type ProcessTag =
+  | 'THE_BREAKTHROUGH'
+  | 'THE_ARGUMENT'
+  | 'THE_GRAVEYARD'
+  | 'THE_LONG_GAME'
+  | 'THE_TANGENT';
+```
+
+### Message Discriminated Union
+```typescript
+type Message =
+  | {
+      speaker: 'human';
+      content: string;
+      annotation?: string;
+    }
+  | {
+      speaker: 'ai';
+      aiSource: AISource;          // REQUIRED for AI messages
+      content: string;
+      isHighlight?: boolean;
+      annotation?: string;
+    };
+```
+
+---
+
+## QUESTIONS & ANSWERS
+
+### Q: Can I modify the contracts now?
+**A:** ❌ NO. Contracts are frozen after Phase 2.
+
+### Q: A test is failing, can I change it?
+**A:** ❌ NO. Tests are frozen after Phase 3. Fix implementation.
+
+### Q: Can I use happy-dom instead of jsdom?
+**A:** ❌ NO. Svelte 5 requires jsdom.
+
+### Q: Should I delete the mock files?
+**A:** ❌ NO. User explicitly requested retention as reference.
+
+### Q: Do I need to write tests for pages in Phase 7?
+**A:** ⚠️ GRAY AREA. Pages compose existing tested components. Focus on composition.
+
+### Q: How do I add more projects?
+**A:**
+1. Create JSON file in `src/lib/data/projects/`
+2. Ensure it passes validateProject()
+3. Import it in `project.service.ts`
+4. Add to projects array
+
+---
+
+## SUCCESS CRITERIA FOR NEXT SESSION
+
+### Phase 7 Complete When:
+- [ ] Root layout exists with WingNav
+- [ ] Home page exists
+- [ ] Wing listing pages exist for all 5 wings
+- [ ] Project detail pages exist
+- [ ] Transcript pages exist
+- [ ] All pages use existing components
+- [ ] SvelteKit routing works correctly
+- [ ] Data loads via services
+- [ ] Navigation between pages works
+- [ ] All 66 tests still passing
+
+### Phase 8 Complete When:
+- [ ] Real project JSON files added
+- [ ] Real transcript JSON files added
+- [ ] Site deployed to production
+- [ ] Domain configured
+- [ ] All routes work in production
+- [ ] Project COMPLETE
 
 ---
 
 ## FINAL NOTES
 
-This project is an **experiment in AI-assisted development** using SDD methodology. The goal is to prove that:
+### What Went Well
+1. **SDD Methodology** - Tests frozen, implementations regeneratable
+2. **Type Safety** - Discriminated unions work perfectly
+3. **Component Composition** - Clean hierarchy
+4. **Theme System** - CSS variables make styling consistent
+5. **Dynamic Colors** - WingNav pattern is elegant
+6. **Validation** - Comprehensive validation catches issues early
+7. **Test Coverage** - 66 tests, all passing
 
-1. **Contracts can be frozen** and implementation regenerated without modifying them
-2. **Tests define success** more reliably than debugging
-3. **Mocks prove testability** before real implementation exists
-4. **The process IS the product** - the journey matters as much as the destination
+### Challenges Overcome
+1. ✅ Vitest environment (happy-dom → jsdom)
+2. ✅ Array mutation vulnerability (defensive copying)
+3. ✅ Incomplete validation (basic → comprehensive)
 
-The portfolio itself will showcase this process, displaying full conversation transcripts and development logs alongside the finished work.
+### Architectural Highlights
+- **WingNav dynamic colors** - Best example of combining data + CSS variables
+- **Discriminated unions** - Type-safe message handling
+- **Service interfaces** - Future-proof async patterns
+- **Validation at boundaries** - Fail fast with clear errors
 
-Stay disciplined to the methodology. Trust the process. Delete and regenerate, don't debug.
+### Repository Statistics
+- **Total Tests:** 66 (100% passing)
+- **Components:** 5 (all styled and tested)
+- **Services:** 2 (both validated and tested)
+- **Contracts:** 2 (frozen, foundational)
+- **Test Success Rate:** 100% since Phase 4
 
-**Good luck with Phase 4!** 🚀
+---
+
+## HANDOVER CHECKLIST
+
+**For Next AI Agent:**
+
+- [ ] Read this HANDOVER.md completely
+- [ ] Understand SDD methodology (contracts frozen, tests frozen)
+- [ ] Review frozen contracts in `src/lib/contracts/`
+- [ ] Review frozen tests (do NOT modify)
+- [ ] Run `npm test` to verify all 66 tests pass
+- [ ] Check git status and current branch
+- [ ] Review Phase 6 code review in `notes/PHASE-6-CODE-REVIEW.md`
+- [ ] Understand vitest.config.ts is specific (jsdom + browser conditions)
+- [ ] Note that mock files are KEPT (don't delete)
+- [ ] Ready to start Phase 7 (Pages)
+
+**DO NOT:**
+- ❌ Modify contracts (frozen Phase 2)
+- ❌ Modify tests (frozen Phase 3)
+- ❌ Change vitest environment to happy-dom
+- ❌ Delete mock files
+- ❌ Revert to basic validation
+
+**ALWAYS:**
+- ✅ Read frozen contracts before writing code
+- ✅ Run tests frequently
+- ✅ Fix implementations to pass tests
+- ✅ Use CSS variables from theme system
+- ✅ Commit with descriptive messages
+- ✅ Verify all tests pass before pushing
+
+---
+
+**END OF HANDOVER**
+
+Last Updated: 2025-12-28
+Generated by: Claude (Sonnet 4.5)
+For: Next development session
+Phase: 6 → 7 transition
+Status: ✅ READY FOR PHASE 7
