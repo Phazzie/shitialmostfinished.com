@@ -260,7 +260,7 @@ shitialmostfinished.com/
 
 ### Test Status
 ```
-Test Files: 7 passed (7)
+Test Files: 9 passed (9)
 Tests: 66 passed (66)
 Duration: ~6.5s
 ```
