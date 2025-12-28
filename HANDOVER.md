@@ -68,7 +68,7 @@
    - Located in `*.test.ts` files
    - If implementation fails tests, fix implementation NOT tests
 
-3. **Implementations (Phase 4+)** - DISPOSABLE and regeneratable
+3. **Implementations (Phase 4+)** - DISPOSABLE and can be regenerated
    - Mocks, components, services can be deleted and rewritten
    - Must pass frozen tests
    - All have `// DISPOSABLE` header comments
