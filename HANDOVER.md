@@ -165,7 +165,7 @@ Phase 8: Data & Deploy (Real content + deployment)
 8. `src/lib/components/TranscriptViewer.test.ts` (11 tests)
 9. `src/lib/components/WingNav.test.ts` (8 tests)
 
-**Total Test Count: 66 tests**
+**Total Test Count: 72 tests**
 **Test Status: 🔒 FROZEN - All tests passing since Phase 4**
 
 ### Phase 4: Mocks ✅ COMPLETE
