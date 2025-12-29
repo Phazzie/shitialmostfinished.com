@@ -8,6 +8,8 @@
 	import TagBadge from '$lib/components/TagBadge.svelte';
 	import ProjectCard from '$lib/components/ProjectCard.svelte';
 	import { WING_CONFIGS } from '$lib/contracts';
+	import { browser } from '$app/environment';
+	import DOMPurify from 'dompurify';
 
 	export let data: PageData;
 
@@ -23,6 +25,13 @@
 	};
 
 	$: aiSourceColor = aiSourceColors[project.aiSource];
+
+	// Sanitize HTML content to prevent XSS attacks
+	// Only sanitize in browser context (DOMPurify requires DOM APIs)
+	$: sanitizedQuickVersion = browser
+		? DOMPurify.sanitize(project.quickVersion)
+		: project.quickVersion;
+	$: sanitizedRecap = browser ? DOMPurify.sanitize(project.recap) : project.recap;
 </script>
 
 <svelte:head>
@@ -90,14 +99,14 @@
 	<section class="quick-version">
 		<h2>Quick Version</h2>
 		<div class="markdown-content">
-			{@html project.quickVersion}
+			{@html sanitizedQuickVersion}
 		</div>
 	</section>
 
 	<section class="recap">
 		<h2>The Story So Far</h2>
 		<div class="markdown-content">
-			{@html project.recap}
+			{@html sanitizedRecap}
 		</div>
 	</section>
 
