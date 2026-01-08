@@ -53,7 +53,7 @@
 		<div class="wing-grid">
 			{#each wings as wing}
 				<a href="/{wing}" class="wing-card" data-wing={wing}>
-					<span class="wing-icon">{WING_CONFIGS[wing].icon}</span>
+					<span class="wing-icon" aria-hidden="true">{WING_CONFIGS[wing].icon}</span>
 					<h4>{WING_CONFIGS[wing].name}</h4>
 				</a>
 			{/each}

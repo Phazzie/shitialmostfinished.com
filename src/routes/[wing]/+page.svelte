@@ -19,7 +19,7 @@
 <div class="wing-page" data-wing={wing}>
 	<header class="wing-header">
 		<div class="wing-title">
-			<span class="wing-icon">{wingConfig.icon}</span>
+			<span class="wing-icon" aria-hidden="true">{wingConfig.icon}</span>
 			<h2>{wingConfig.name}</h2>
 		</div>
 		<p class="project-count">

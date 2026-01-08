@@ -19,13 +19,13 @@
 </svelte:head>
 
 <div class="transcript-page" data-wing={project.wing}>
-	<nav class="breadcrumb">
+	<nav class="breadcrumb" aria-label="Breadcrumb">
 		<a href="/">Home</a>
-		<span class="separator">/</span>
+		<span class="separator" aria-hidden="true">/</span>
 		<a href="/{project.wing}">{wingConfig.name}</a>
-		<span class="separator">/</span>
+		<span class="separator" aria-hidden="true">/</span>
 		<a href="/{project.wing}/{project.slug}">{project.title}</a>
-		<span class="separator">/</span>
+		<span class="separator" aria-hidden="true">/</span>
 		<span class="current">Transcript</span>
 	</nav>
 

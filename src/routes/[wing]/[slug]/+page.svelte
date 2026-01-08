@@ -40,11 +40,11 @@
 </svelte:head>
 
 <div class="project-detail" data-wing={project.wing}>
-	<nav class="breadcrumb">
+	<nav class="breadcrumb" aria-label="Breadcrumb">
 		<a href="/">Home</a>
-		<span class="separator">/</span>
+		<span class="separator" aria-hidden="true">/</span>
 		<a href="/{project.wing}">{wingConfig.name}</a>
-		<span class="separator">/</span>
+		<span class="separator" aria-hidden="true">/</span>
 		<span class="current">{project.title}</span>
 	</nav>
 
@@ -58,7 +58,7 @@
 			<div class="meta-item">
 				<span class="label">Wing:</span>
 				<a href="/{project.wing}" class="wing-link">
-					<span class="wing-icon">{wingConfig.icon}</span>
+					<span class="wing-icon" aria-hidden="true">{wingConfig.icon}</span>
 					{wingConfig.name}
 				</a>
 			</div>
