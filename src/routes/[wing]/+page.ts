@@ -5,14 +5,13 @@
 import { error } from '@sveltejs/kit';
 import type { PageLoad } from './$types';
 import { projectService } from '$lib/services/project.service';
-import { WING_CONFIGS, type Wing } from '$lib/contracts';
+import { WING_CONFIGS, VALID_WINGS, type Wing } from '$lib/contracts';
 
 export const load: PageLoad = async ({ params }) => {
 	const { wing } = params;
 
 	// Validate wing parameter
-	const validWings: Wing[] = ['music', 'apps', 'stories', 'process', 'finished'];
-	if (!validWings.includes(wing as Wing)) {
+	if (!VALID_WINGS.includes(wing as Wing)) {
 		throw error(404, `Wing "${wing}" not found`);
 	}
 

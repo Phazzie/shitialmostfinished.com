@@ -6,6 +6,7 @@
 	import type { PageData } from './$types';
 	import TranscriptViewer from '$lib/components/TranscriptViewer.svelte';
 	import { WING_CONFIGS } from '$lib/contracts';
+	import { formatDate } from '$lib/utils/date';
 
 	export let data: PageData;
 
@@ -37,22 +38,14 @@
 			<div class="meta-item">
 				<span class="label">Created:</span>
 				<time datetime={transcript.dateCreated}>
-					{new Date(transcript.dateCreated).toLocaleDateString('en-US', {
-						year: 'numeric',
-						month: 'long',
-						day: 'numeric'
-					})}
+					{formatDate(transcript.dateCreated)}
 				</time>
 			</div>
 
 			<div class="meta-item">
 				<span class="label">Last Updated:</span>
 				<time datetime={transcript.dateUpdated}>
-					{new Date(transcript.dateUpdated).toLocaleDateString('en-US', {
-						year: 'numeric',
-						month: 'long',
-						day: 'numeric'
-					})}
+					{formatDate(transcript.dateUpdated)}
 				</time>
 			</div>
 

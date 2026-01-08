@@ -10,6 +10,7 @@
 	import { WING_CONFIGS } from '$lib/contracts';
 	import { browser } from '$app/environment';
 	import DOMPurify from 'dompurify';
+	import { formatDate } from '$lib/utils/date';
 
 	export let data: PageData;
 
@@ -73,11 +74,7 @@
 			<div class="meta-item">
 				<span class="label">Last Updated:</span>
 				<time datetime={project.dateUpdated}>
-					{new Date(project.dateUpdated).toLocaleDateString('en-US', {
-						year: 'numeric',
-						month: 'long',
-						day: 'numeric'
-					})}
+					{formatDate(project.dateUpdated)}
 				</time>
 			</div>
 		</div>

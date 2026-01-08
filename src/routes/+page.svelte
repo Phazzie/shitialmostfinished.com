@@ -3,9 +3,7 @@
 <!-- DISPOSABLE - delete and regenerate if tests fail -->
 
 <script lang="ts">
-	import { WING_CONFIGS, type Wing } from '$lib/contracts';
-
-	const wings: Wing[] = ['music', 'apps', 'stories', 'process', 'finished'];
+	import { WING_CONFIGS, VALID_WINGS, type Wing } from '$lib/contracts';
 </script>
 
 <svelte:head>
@@ -51,7 +49,7 @@
 	<section class="wings">
 		<h3>Explore the Five Wings</h3>
 		<div class="wing-grid">
-			{#each wings as wing}
+			{#each VALID_WINGS as wing}
 				<a href="/{wing}" class="wing-card" data-wing={wing}>
 					<span class="wing-icon" aria-hidden="true">{WING_CONFIGS[wing].icon}</span>
 					<h4>{WING_CONFIGS[wing].name}</h4>
