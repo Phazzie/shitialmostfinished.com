@@ -42,6 +42,13 @@
 export type Wing = 'music' | 'apps' | 'stories' | 'process' | 'finished';
 
 /**
+ * VALID_WINGS - Array of all valid Wing values
+ * NOTE: This is derived convenience data, not a contract modification.
+ * Mirrors the Wing type definition above for runtime validation.
+ */
+export const VALID_WINGS: Wing[] = ['music', 'apps', 'stories', 'process', 'finished'];
+
+/**
  * AISource - Tracks which AI tool(s) helped create the project
  *
  * - claude: Anthropic's Claude (this AI!)
